@@ -24,4 +24,18 @@ At the command-line, cd into an empty directory, run this command and follow the
 grunt-init basic
 ```
 
+You should now install project dependencies with:
+
+```
+npm instal && bower install
+```
+
+After that, you may execute project tasks with grunt.
+```
+grunt css       // compile stylus
+grunt js        // lint js files
+grunt build     // build project with requirejs
+grunt           // run watch task for compile stylus and lint js files
+```
+
 _Note that this template will generate files in the current directory, so be sure to change to a new directory first if you don't want to overwrite existing files._

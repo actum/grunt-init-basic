@@ -73,7 +73,7 @@ module.exports = function(grunt) {
             },
             js: {
                 files: '<%= jshint.js.src %>',
-                tasks: ['js']
+                tasks: ['jshint:js']
             }
         }
     });
