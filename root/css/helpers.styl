@@ -1,0 +1,72 @@
+// colors
+yellow = pink
+
+// typography
+link()
+    text-decoration underline
+
+    &:hover
+        text-decoration none
+
+r-link()
+    text-decoration none
+
+    &:hover
+        text-decoration underline
+
+sans-serif()
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+
+ellipsis(width = false)
+    if width
+        width width
+    text-overflow ellipsis
+    white-space nowrap
+    overflow hidden
+
+// reset
+reset-list()
+    margin 0
+    padding 0
+    list-style none
+
+// dimensions
+block()
+    display block
+    if arguments[0]
+        width arguments[0]
+    if arguments[1]
+        height arguments[1]
+
+
+// image replacement
+ir(img, width = 30px, height = 30px, position = 0 0)
+    width width
+    height height
+    background-image img
+    background-position position
+    background-color transparent
+    background-repeat no-repeat
+    border 0
+    overflow hidden
+    // IE 6/7 fallback
+    *text-indent -9999px
+
+    &:before
+        content ""
+        display block
+        width 0
+        height 150%
+
+// graphic symbols
+arrow(align = right, width = 10px, color = black)
+    block 0px 0px
+    border width solid transparent
+    if align == 'right'
+        border-left-color color
+    if align == 'left'
+        border-right-color color
+    if align == 'top'
+        border-bottom-color color
+    if align == 'bottom'
+        border-top-color color
