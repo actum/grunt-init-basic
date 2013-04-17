@@ -9,9 +9,9 @@
 [bower]: http://twitter.github.io/bower/
 
 ## Requirements
-[NodeJS][nodejs]
-[Grunt][grunt]
-[Bower][bower]
+- [NodeJS][nodejs]
+- [Grunt][grunt]
+- [Bower][bower]
 
 ## Installation
 If you haven't already done so, install [grunt-init][].
