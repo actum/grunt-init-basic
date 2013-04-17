@@ -68,7 +68,7 @@ module.exports = function(grunt) {
                 tasks: ['jshint:gruntfile']
             },
             css: {
-                files: 'css/main.styl',
+                files: 'css/**/*.styl',
                 tasks: ['css']
             },
             js: {
@@ -92,4 +92,3 @@ module.exports = function(grunt) {
     grunt.registerTask('build', ['css', 'concat:css', 'jshint', 'requirejs', 'concat:js']);
 
 };
-

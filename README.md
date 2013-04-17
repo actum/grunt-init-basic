@@ -5,6 +5,11 @@
 
 [grunt-init]: http://gruntjs.com/project-scaffolding
 
+## Requirements
+[NodeJS]: http://nodejs.org/
+[Grunt]: http://gruntjs.com/
+[Bower]: http://twitter.github.io/bower/
+
 ## Installation
 If you haven't already done so, install [grunt-init][].
 
