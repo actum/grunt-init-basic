@@ -46,8 +46,8 @@ exports.template = function(grunt, init, done) {
     init.prompt('author_name'),
     init.prompt('author_email'),
     init.prompt('author_url')], function(err, props) {
-        // A few additional properties. FIXME in Gruntfile.js - load props.name + '.json'
-        // props.basicjson = props.name + '.json';
+        // A few additional properties.
+        props.basicjson = props.name + '.json';
 
         props.keywords = [];
 
