@@ -4,11 +4,14 @@
 > Create a basic project inculde Stylus, RequireJS and jQuery.
 
 [grunt-init]: http://gruntjs.com/project-scaffolding
+[nodejs]: http://nodejs.org/
+[grunt]: http://gruntjs.com/
+[bower]: http://twitter.github.io/bower/
 
 ## Requirements
-[NodeJS]: http://nodejs.org/
-[Grunt]: http://gruntjs.com/
-[Bower]: http://twitter.github.io/bower/
+[NodeJS][nodejs]
+[Grunt][grunt]
+[Bower][bower]
 
 ## Installation
 If you haven't already done so, install [grunt-init][].
