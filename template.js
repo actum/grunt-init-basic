@@ -8,6 +8,9 @@
 
 'use strict';
 
+// Nodejs libs.
+var path = require('path');
+
 // Basic template description.
 exports.description = 'Create a basic project inculde Stylus, RequireJS and jQuery.';
 
@@ -17,8 +20,8 @@ exports.notes = '_Project name_ should be a unique ID. _Project ' +
 
 // Template-specific notes to be displayed after question prompts.
 exports.after = 'You should now install project dependencies with _npm ' +
-    'install_. After that, you may execute project tasks with _grunt_. For ' +
-    'more information about installing and configuring Grunt, please see ' +
+    'install && bower install_. After that, you may execute project tasks with _grunt_. ' +
+    'For more information about installing and configuring Grunt, please see ' +
     'the Getting Started guide:' +
     '\n\n' +
     'http://gruntjs.com/getting-started';
@@ -32,20 +35,25 @@ exports.template = function(grunt, init, done) {
     init.process({
         type: 'basic'
     }, [
-    // Prompt for these values.
-    init.prompt('name'),
-    init.prompt('title', function(value, data, done) {
-        done(null, value);
-    }),
-    init.prompt('description', 'Best project ever.'),
-    init.prompt('version'),
-    init.prompt('repository'),
-    init.prompt('homepage'),
-    init.prompt('bugs'),
-    init.prompt('licenses', 'MIT'),
-    init.prompt('author_name'),
-    init.prompt('author_email'),
-    init.prompt('author_url')], function(err, props) {
+        // Prompt for these values.
+        init.prompt('name'),
+        init.prompt('title', function(value, data, done) {
+            done(null, value);
+        }),
+        init.prompt('description', 'Best project ever.'),
+        init.prompt('version'),
+        init.prompt('repository', function(value, data, done) {
+            done(null, 'git://github.com/actum/' + data.name + '.git');
+        }),
+        init.prompt('homepage', function(value, data, done) {
+            done(null, 'http://www.' + data.name + '.cz/');
+        }),
+        init.prompt('bugs'),
+        init.prompt('licenses', 'MIT'),
+        init.prompt('author_name', 'Actum'),
+        init.prompt('author_email', 'actum@actum.cz'),
+        init.prompt('author_url', 'http://www.actum.cz/')
+    ], function(err, props) {
         // A few additional properties.
         props.basicjson = props.name + '.json';
 
@@ -73,7 +81,7 @@ exports.template = function(grunt, init, done) {
                 'grunt-contrib-concat': '~0.1.2',
                 'grunt-contrib-watch': '~0.2.0',
                 'grunt-contrib-stylus': '~0.5.0',
-                "grunt-contrib-requirejs": "~0.4.0",
+                'grunt-contrib-requirejs': '~0.4.0',
                 'grunt': '~0.4.1'
             },
         });
