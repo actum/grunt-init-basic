@@ -1,7 +1,7 @@
 # grunt-init-basic
 
-> Basic boilerplate for new project based on grunt, bower, html5boilerplate and others.
-> Create a basic project inculde Stylus, RequireJS and jQuery.
+> Basic boilerplate for new project based on grunt, bower, html5boilerplate and others.<br>
+> Create a basic project include Stylus, RequireJS and jQuery.
 
 [grunt-init]: http://gruntjs.com/project-scaffolding
 [nodejs]: http://nodejs.org/

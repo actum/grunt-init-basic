@@ -77,10 +77,12 @@ exports.template = function(grunt, init, done) {
             // TODO: pull from grunt's package.json
             node_version: '>= 0.8.0',
             devDependencies: {
-                'grunt-contrib-jshint': '~0.1.1',
-                'grunt-contrib-concat': '~0.1.2',
-                'grunt-contrib-watch': '~0.2.0',
                 'grunt-contrib-stylus': '~0.5.0',
+                'grunt-contrib-csslint': '~0.1.2',
+                'grunt-contrib-cssmin': '~0.6.0',
+                'grunt-contrib-concat': '~0.1.2',
+                'grunt-contrib-jshint': '~0.1.1',
+                'grunt-contrib-watch': '~0.2.0',
                 'grunt-contrib-requirejs': '~0.4.0',
                 'grunt': '~0.4.1'
             },

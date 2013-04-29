@@ -1,6 +1,6 @@
 require.config({
     paths: {
-        'jquery': 'bower/jquery/jquery'
+        'jquery': '../bower/jquery/jquery'
     },
     shim: {}
 });
