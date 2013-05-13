@@ -114,6 +114,12 @@ module.exports = function(grunt) {
             js: {
                 files: '<%= jshint.js.src %>',
                 tasks: ['jshint:js']
+            },
+            livereload: {
+                options: {
+                    livereload: true
+                },
+                files: ['index.html', 'css/style.css', '<%= jshint.js.src %>']
             }
         }
     });
@@ -129,8 +135,8 @@ module.exports = function(grunt) {
 
     // Default task.
     grunt.registerTask('default', ['watch']);
-    grunt.registerTask('cssdev', ['stylus', 'concat:css', 'csslint:dev']);
-    grunt.registerTask('css', ['stylus', 'cssmin', 'csslint:production']);
+    grunt.registerTask('cssdev', ['stylus', 'concat:css']);
+    grunt.registerTask('css', ['stylus', 'cssmin']);
     grunt.registerTask('js', ['jshint']);
     grunt.registerTask('build', ['css', 'jshint', 'requirejs', 'concat:js']);
 
