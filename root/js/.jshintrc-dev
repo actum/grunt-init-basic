@@ -15,8 +15,8 @@
     "quotmark": "single",
     "browser": true,
 
-    "debug": false,
-    "devel": false,
+    "debug": true,
+    "devel": true,
 
     "jquery": true,
     "predef": [

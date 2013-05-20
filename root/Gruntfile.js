@@ -85,6 +85,12 @@ module.exports = function(grunt) {
                 },
                 src: 'Gruntfile.js'
             },
+            jsdev: {
+                options: {
+                    jshintrc: 'js/.jshintrc-dev'
+                },
+                src: ['js/main.js', 'js/app/**/*.js']
+            },
             js: {
                 options: {
                     jshintrc: 'js/.jshintrc'
@@ -113,7 +119,7 @@ module.exports = function(grunt) {
             },
             js: {
                 files: '<%= jshint.js.src %>',
-                tasks: ['jshint:js']
+                tasks: ['jshint:jsdev']
             },
             livereload: {
                 options: {
@@ -137,7 +143,8 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['watch']);
     grunt.registerTask('cssdev', ['stylus', 'concat:css']);
     grunt.registerTask('css', ['stylus', 'cssmin']);
-    grunt.registerTask('js', ['jshint']);
-    grunt.registerTask('build', ['css', 'jshint', 'requirejs', 'concat:js']);
+    grunt.registerTask('jsdev', ['jshint:gruntfile', 'jshint:jsdev']);
+    grunt.registerTask('js', ['jshint:gruntfile', 'jshint:js']);
+    grunt.registerTask('build', ['css', 'js', 'requirejs', 'concat:js']);
 
 };
