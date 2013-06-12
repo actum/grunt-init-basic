@@ -16,11 +16,11 @@ module.exports = function(grunt) {
         stylus: {
             compile: {
                 options: {
-                    compress: true,
+                    compress: false,
                     urlfunc: 'embedurl' // use embedurl('test.png') in our code to trigger Data URI embedding
                 },
                 files: {
-                    'css/style.css': 'css/main.styl'
+                    'www/css/stylus.css': 'www/css/main.styl'
                 }
             }
         },
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
                 csslintrc: '.csslintrc'
             },
             dev: {
-                src: ['css/style.css']
+                src: ['www/css/stylus.css']
             },
             production: {
                 options: {
@@ -54,27 +54,23 @@ module.exports = function(grunt) {
             },
             // used for dev css build
             css: {
-                src: ['bower/normalize-css/normalize.css', 'css/style.css'],
-                dest: 'css/style.css'
+                src: ['www/bower/normalize-css/normalize.css', 'www/css/stylus.css'],
+                dest: 'www/css/style.css'
             },
             js: {
-                src: ['js/main-compiled.js'],
-                dest: 'js/main-compiled.js'
+                src: ['www/js/app-compiled.js'],
+                dest: 'www/js/app-compiled.js'
             }
         },
+        // used for production build
         cssmin: {
             compress: {
-                // used for production build
-                files: {
-                    'css/style.css': ['bower/normalize-css/normalize.css', 'css/style.css']
-                }
-            },
-            with_banner: {
                 options: {
-                    banner: '<%= banner %>'
+                    banner: '<%= banner %>',
+                    report: 'gzip'
                 },
                 files: {
-                    'css/style.css': ['css/style.css']
+                    'www/css/style.css': ['www/css/stylus.css']
                 }
             }
         },
@@ -87,46 +83,103 @@ module.exports = function(grunt) {
             },
             jsdev: {
                 options: {
-                    jshintrc: 'js/.jshintrc-dev'
+                    jshintrc: 'www/js/.jshintrc-dev'
                 },
-                src: ['js/main.js', 'js/app/**/*.js']
+                src: ['www/js/app/**/*.js', '!www/js/app/**/*.hbs.js']
             },
             js: {
                 options: {
-                    jshintrc: 'js/.jshintrc'
+                    jshintrc: 'www/js/.jshintrc'
                 },
-                src: ['js/main.js', 'js/app/**/*.js']
+                src: ['www/js/app/**/*.js', '!www/js/app/**/*.hbs.js']
+            }
+        },
+        jsvalidate: {
+            files: ['www/js/app/**/*.js', '!www/js/app/**/*.hbs.js']
+        },
+        handlebars: {
+            compile: {
+                options: {
+                    namespace: false,
+                    amd: true
+                },
+                files: [{
+                    expand: true,
+                    src: ['www/js/app/**/*.hbs'],
+                    dest: '',
+                    ext: '.hbs.js'
+                }]
             }
         },
         requirejs: {
             compile: {
                 options: {
-                    baseUrl: 'js',
-                    mainConfigFile: 'js/main.js',
+                    almond: true,
+                    baseUrl: 'www/js/app',
+                    mainConfigFile: 'www/js/app/main.js',
                     name: 'main',
-                    out: 'js/main-compiled.js'
+                    out: 'www/js/app-compiled.js'
                 }
             }
         },
         watch: {
-            gruntfile: {
-                files: '<%= jshint.gruntfile.src %>',
-                tasks: ['jshint:gruntfile']
-            },
-            css: {
-                files: 'css/**/*.styl',
-                tasks: ['cssdev']
-            },
-            js: {
-                files: '<%= jshint.js.src %>',
-                tasks: ['jshint:jsdev']
-            },
             livereload: {
                 options: {
                     livereload: true
                 },
-                files: ['index.html', 'css/style.css', '<%= jshint.js.src %>']
+                files: ['www/index.html', 'www/css/style.css', '<%= jshint.js.src %>']
             }
+            gruntfile: {
+                files: '<%= jshint.gruntfile.src %>',
+                tasks: ['jshint:gruntfile', 'jsvalidate']
+            },
+            css: {
+                files: 'www/css/**/*.styl',
+                tasks: ['cssdev']
+            },
+            js: {
+                options: {
+                    livereload: true
+                },
+                files: '<%= jshint.js.src %>',
+                tasks: ['jshint:jsdev']
+            },
+            handlebars: {
+                options: {
+                    livereload: true
+                },
+                files: 'www/js/app/**/*.hbs',
+                tasks: ['handlebars']
+            }
+        },
+        clean: {
+            css: 'www/css/stylus.css',
+            build: [
+                'www/css/stylus.css',
+                'www/css/style.css',
+                'www/js/app.js',
+                'www/js/app/**/*.hbs.js'
+            ],
+            bower: 'www/bower',
+            npm: 'node_modules',
+            pack: [
+                '.bowerrc',
+                '.csslintrc',
+                '.editorconfig',
+                '.gitattributes',
+                '.gitignore',
+                '.jshintrc',
+                'Gruntfile.js',
+                'README.md',
+                '*.json',
+                'node_modules',
+                'www/css/*.styl',
+                'www/js/*',
+                '!www/js/app-compiled.js',
+                'www/js/.jshintrc',
+                'www/js/.jshintrc-dev',
+                'www/bower'
+            ]
         }
     });
 
@@ -135,16 +188,20 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-csslint');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-jsvalidate');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-clean');
 
-    // Default task.
+    // Custom tasks (aliases).
     grunt.registerTask('default', ['watch']);
-    grunt.registerTask('cssdev', ['stylus', 'concat:css']);
-    grunt.registerTask('css', ['stylus', 'cssmin']);
-    grunt.registerTask('jsdev', ['jshint:gruntfile', 'jshint:jsdev']);
-    grunt.registerTask('js', ['jshint:gruntfile', 'jshint:js']);
+    grunt.registerTask('cssdev', ['stylus', 'concat:css', 'clean:css']);
+    grunt.registerTask('css', ['stylus', 'cssmin', 'clean:css']);
+    grunt.registerTask('jsdev', ['jshint:gruntfile', 'jshint:jsdev', 'jsvalidate']);
+    grunt.registerTask('js', ['handlebars', 'jshint:gruntfile', 'jshint:js', 'jsvalidate']);
     grunt.registerTask('build', ['css', 'js', 'requirejs', 'concat:js']);
+    // Beware of 'grunt pack' task
+    grunt.registerTask('pack', ['build', 'clean:pack']);
 
 };

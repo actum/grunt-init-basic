@@ -1,4 +1,7 @@
 {
     "box-model": false,
-    "unique-headings": false
+    "unique-headings": false,
+    "qualified-headings": false,
+    "adjoining-classes": false,
+    "font-sizes": false
 }

@@ -1,3 +1,6 @@
+# npm
 /node_modules/
-/bower/
 npm-debug.log
+
+# bower
+/www/bower/

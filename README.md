@@ -38,12 +38,29 @@ You should now install project dependencies with:
 npm instal && bower install
 ```
 
+or you can use Shell script:
+
+```
+./init.sh
+```
+
+You should use init.sh after each pull to refresh all dependencies and initialize app.
+
+Before each commit run the build task to be shure the app is ok.
+
+```
+grunt build
+```
+
 After that, you may execute project tasks with grunt.
+
 ```
 grunt css       // compile stylus
-grunt js        // lint js files
+grunt js        // lint js files, compile js templates
 grunt build     // build project with requirejs
-grunt           // run watch task for compile stylus and lint js files
+grunt           // run watch task for compile stylus, compile js templates and lint js files
+
+grunt pack		// Beware of this task - it clean all source files (this is task for CI server)
 ```
 
 _Note that this template will generate files in the current directory, so be sure to change to a new directory first if you don't want to overwrite existing files._
