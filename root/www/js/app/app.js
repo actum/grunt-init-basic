@@ -20,7 +20,7 @@ define(['jquery'], function ($) {
         /**
          * Delete this
          */
-        console.info('jQuery version: ', $.fn.jquery);
+        $('p').append('App works!');
 
     };
 
