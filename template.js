@@ -81,12 +81,13 @@ exports.template = function(grunt, init, done) {
                 'grunt-contrib-csslint': '~0.1.2',
                 'grunt-contrib-cssmin': '~0.6.1',
                 'grunt-contrib-concat': '~0.1.3',
-                "grunt-jsvalidate": "~0.2.1",
+                'grunt-jsvalidate': '~0.2.1',
                 'grunt-contrib-jshint': '~0.1.1',
                 'grunt-contrib-watch': '~0.4.4',
                 'grunt-requirejs': '~0.3.5',
-                "grunt-contrib-handlebars": "~0.5.8",
-                "grunt-contrib-clean": "~0.4.1",
+                'grunt-contrib-handlebars': '~0.5.8',
+                'grunt-contrib-imagemin': '~0.1.4',
+                'grunt-contrib-clean': '~0.4.1',
                 'grunt': '~0.4.1'
             },
         });

@@ -111,6 +111,23 @@ module.exports = function(grunt) {
                 }]
             }
         },
+        imagemin: {
+            production: {
+                options: {
+                    optimizationLevel: 3,
+                    progressive: true
+                },
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'www/gfx',
+                        src: ['**/*.png', '**/*.jpg'],
+                        dest: 'www/gfx',
+                        ext: ''
+                    }
+                ]
+            }
+        },
         requirejs: {
             compile: {
                 options: {
@@ -191,6 +208,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-jsvalidate');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-handlebars');
+    grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-requirejs');
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -199,9 +217,10 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['watch']);
     grunt.registerTask('cssdev', ['stylus', 'concat:css', 'clean:css']);
     grunt.registerTask('css', ['stylus', 'cssmin', 'clean:css']);
+    grunt.registerTask('gfx', ['imagemin']);
     grunt.registerTask('jsdev', ['jshint:gruntfile', 'jshint:jsdev', 'jsvalidate']);
     grunt.registerTask('js', ['handlebars', 'jshint:gruntfile', 'jshint:js', 'jsvalidate']);
-    grunt.registerTask('build', ['css', 'js', 'requirejs', 'concat:js']);
+    grunt.registerTask('build', ['css', 'gfx', 'js', 'requirejs', 'concat:js']);
     // Beware of 'grunt pack' task
     grunt.registerTask('pack', ['build', 'clean:pack']);
 
