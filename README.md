@@ -41,6 +41,7 @@ npm instal && bower install
 or you can use Shell script:
 
 ```
+chmod +x init.sh
 ./init.sh
 ```
 
