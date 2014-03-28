@@ -10,15 +10,9 @@ window.App = function(config) {
 window.App.prototype.start = function() {
 
     /**
-     * Set Handlebars defaults
-     * @type {Number} DEBUG: 0, INFO: 1, WARN: 2, ERROR: 3
-     */
-    window.Handlebars.logger.level = this.config.handlebarsLogLevel || 3;
-
-    /**
      * Delete this
      */
-    $('p').append('App works!');
+    $('p').after('<h2>App works!</h2>');
 
 };
 

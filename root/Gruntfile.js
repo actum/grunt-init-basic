@@ -130,7 +130,7 @@ module.exports = function(grunt) {
         browserify: {
             options: {
                 shim: {
-                    jquery: { path: '<%= bower %>/jquery/jquery.js', exports: 'window.jQuery' },
+                    jquery: { path: '<%= bower %>/jquery/dist/jquery.js', exports: 'window.jQuery' },
                     handlebars: { path: 'node_modules/grunt-contrib-handlebars/node_modules/handlebars/dist/handlebars.runtime.js', exports: 'Handlebars' }
                 }
             },

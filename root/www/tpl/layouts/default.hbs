@@ -20,11 +20,7 @@
             <script src="js/app-compiled.min.js"></script>
         {{/if}}
         <script>
-            var config = {
-                {{#if environment.devel}}
-                    handlebarsLogLevel: 0
-                {{/if}}
-            };
+            var config = {};
 
             window.app = new App(config);
             app.start();
