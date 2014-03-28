@@ -21,6 +21,9 @@
     "jquery": true,
     "predef": [
         "require",
-        "define"
-    ]
+        "module"
+    ],
+    "globals": {
+        "$": true
+    }
 }

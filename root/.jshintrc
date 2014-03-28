@@ -13,5 +13,6 @@
     "indent": 4,
     "white": false,
     "quotmark": "single",
+    "trailing": true,
     "node": true
 }

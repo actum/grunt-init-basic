@@ -6,109 +6,99 @@ module.exports = function(grunt) {
     grunt.initConfig({
         // Metadata.
         pkg: grunt.file.readJSON('{%= basicjson %}'),
-        banner: '/*!\n' +
-            ' * <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
-            '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-            '<%= pkg.homepage ? " * " + pkg.homepage + "\\n" : "" %>' +
-            ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-            ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> \n */\n',
+        // global
+        documentRoot: 'www',
+        bower: 'bower_components',
+        // css
+        css: '<%= documentRoot %>/css',
+        cssFile: '<%= css %>/style.css',
+        lessRoot: '<%= css %>/main.less',
+        // img
+        img: '<%= documentRoot %>/img',
+        // js
+        js: '<%= documentRoot %>/js',
+        app: '<%= js %>/app',
+        appCompiled: '<%= js %>/app-compiled.js',
+        // templates
+        tpl: '<%= documentRoot %>/tpl',
+        // dist
+        dist: 'dist',
         // Task configuration.
-        stylus: {
-            compile: {
-                options: {
-                    compress: false,
-                    urlfunc: 'embedurl' // use embedurl('test.png') in our code to trigger Data URI embedding
-                },
-                files: {
-                    'www/css/stylus.css': 'www/css/main.styl'
-                }
-            }
-        },
-        // https://github.com/stubbornella/csslint/wiki/Rules
-        csslint: {
+        less: {
             options: {
-                csslintrc: '.csslintrc'
+                paths: [
+                    '<%= css %>',
+                    '<%= bower %>'
+                ],
+                relativeUrls: true
             },
             dev: {
-                src: ['www/css/stylus.css']
+                options: {
+                    sourceMap: true,
+                    sourceMapFilename: '<%= css %>/style.css.map',
+                    sourceMapURL: 'style.css.map',
+                    sourceMapBasepath: '<%= documentRoot %>',
+                    outputSourceFiles: true
+                },
+                files: {
+                    '<%= cssFile %>': '<%= lessRoot %>'
+                }
             },
             production: {
                 options: {
-                    'star-property-hack': false,
-                    'important': false,
-                    'adjoining-classes': false,
-                    'universal-selector': false,
-                    'compatible-vendor-prefixes': false,
-                    'regex-selectors': false,
-                    'box-sizing': false,
-                    'unqualified-attributes': false,
-                    'outline-none': false
-                },
-                src: ['css/style.css']
-            }
-        },
-        concat: {
-            options: {
-                banner: '<%= banner %>',
-                stripBanners: true
-            },
-            // used for dev css build
-            css: {
-                src: ['www/bower/normalize-css/normalize.css', 'www/css/stylus.css'],
-                dest: 'www/css/style.css'
-            },
-            js: {
-                src: ['www/js/app-compiled.js'],
-                dest: 'www/js/app-compiled.js'
-            }
-        },
-        // used for production build
-        cssmin: {
-            compress: {
-                options: {
-                    banner: '<%= banner %>',
-                    report: 'gzip'
+                    cleancss: true,
+                    report: 'min'
                 },
                 files: {
-                    'www/css/style.css': ['www/css/stylus.css']
+                    '<%= cssFile %>': '<%= lessRoot %>'
                 }
             }
         },
+        handlebars: {
+            compile: {
+                options: {
+                    namespace: false,
+                    commonjs: true,
+                    processName: function(filePath) {
+                        var pieces = filePath.split('/');
+                        return pieces[pieces.length - 1];
+                    }
+                },
+                files: [{
+                    expand: true,
+                    src: ['<%= app %>/**/*.hbs'],
+                    dest: '',
+                    ext: '.hbs.js'
+                }]
+            }
+        },
         jshint: {
+            options: {
+                reporter: require('jshint-stylish')
+            },
             gruntfile: {
                 options: {
                     jshintrc: '.jshintrc'
                 },
                 src: 'Gruntfile.js'
             },
-            jsdev: {
+            dev: {
                 options: {
-                    jshintrc: 'www/js/.jshintrc-dev'
+                    jshintrc: '<%= app %>/.jshintrc-dev'
                 },
-                src: ['www/js/app/**/*.js', '!www/js/app/**/*.hbs.js']
+                src: [
+                    '<%= app %>/**/*.js',
+                    '!<%= app %>/**/*.hbs.js'
+                ]
             },
-            js: {
+            production: {
                 options: {
-                    jshintrc: 'www/js/.jshintrc'
+                    jshintrc: '<%= app %>/.jshintrc'
                 },
-                src: ['www/js/app/**/*.js', '!www/js/app/**/*.hbs.js']
-            }
-        },
-        jsvalidate: {
-            files: ['www/js/app/**/*.js', '!www/js/app/**/*.hbs.js']
-        },
-        handlebars: {
-            compile: {
-                options: {
-                    namespace: false,
-                    amd: true
-                },
-                files: [{
-                    expand: true,
-                    src: ['www/js/app/**/*.hbs'],
-                    dest: '',
-                    ext: '.hbs.js'
-                }]
+                src: [
+                    '<%= app %>/**/*.js',
+                    '!<%= app %>/**/*.hbs.js'
+                ]
             }
         },
         imagemin: {
@@ -120,108 +110,162 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'www/gfx',
-                        src: ['**/*.png', '**/*.jpg'],
-                        dest: 'www/gfx',
+                        cwd: '<%= img %>',
+                        src: ['**/*.{png,jpg,gif}'],
+                        dest: '<%= img %>',
                         ext: ''
                     }
                 ]
             }
         },
-        requirejs: {
-            compile: {
+        jscs: {
+            options: {
+                config: '.jscsrc'
+            },
+            src: [
+                '<%= app %>/**/*.js',
+                '!<%= app %>/**/*.hbs.js'
+            ]
+        },
+        browserify: {
+            options: {
+                shim: {
+                    jquery: { path: '<%= bower %>/jquery/jquery.js', exports: 'window.jQuery' },
+                    handlebars: { path: 'node_modules/grunt-contrib-handlebars/node_modules/handlebars/dist/handlebars.runtime.js', exports: 'Handlebars' }
+                }
+            },
+            dev: {
                 options: {
-                    almond: true,
-                    baseUrl: 'www/js/app',
-                    mainConfigFile: 'www/js/app/main.js',
-                    name: 'main',
-                    out: 'www/js/app-compiled.js'
+                    debug: true
+                },
+                files: {
+                    '<%= appCompiled %>': ['<%= app %>/app.js']
+                }
+            },
+            production: {
+                files: {
+                    '<%= appCompiled %>': ['<%= app %>/app.js']
+                }
+            }
+        },
+        uglify: {
+            options: {
+                report: 'min'
+            },
+            compile: {
+                files: {
+                    '<%= js %>/app-compiled.min.js': ['<%= appCompiled %>']
+                }
+            }
+        },
+        clean: {
+            production: ['<%= dist %>'],
+            tpl: ['<%= documentRoot %>/*.html']
+        },
+        copy: {
+            options: {
+                nonull: true
+            },
+            js: {
+                files: [{
+                    expand: true,
+                    flatten: true,
+                    src: ['<%= bower %>/html5shiv/dist/html5shiv-printshiv.js'],
+                    dest: '<%= js %>'
+                }]
+            },
+            production: {
+                files: [{
+                    expand: true,
+                    cwd: 'www',
+                    src: [
+                        'css/style.css',
+                        'js/*.js',
+                        'img/**/*',
+                        '*.html'
+                    ],
+                    dest: '<%= dist %>'
+                }]
+            }
+        },
+        assemble: {
+            options: {
+                pkg: '<%= pkg %>',
+                flatten: true
+            },
+            dev: {
+                options: {
+                    data: '<%= tpl %>/dev/*.json',
+                    partials: ['<%= tpl %>/partials/**/*.hbs'],
+                    layout: '<%= tpl %>/layouts/default.hbs'
+                },
+                files: {
+                    '<%= documentRoot %>': ['<%= tpl %>/pages/**/*.hbs']
+                }
+            },
+            production: {
+                options: {
+                    data: '<%= tpl %>/production/*.json',
+                    partials: ['<%= tpl %>/partials/**/*.hbs'],
+                    layout: '<%= tpl %>/layouts/default.hbs'
+                },
+                files: {
+                    '<%= documentRoot %>': ['<%= tpl %>/pages/**/*.hbs']
                 }
             }
         },
         watch: {
+            gruntfile: {
+                files: 'Gruntfile.js',
+                tasks: ['jshint:gruntfile']
+            },
             livereload: {
                 options: {
                     livereload: true
                 },
-                files: ['www/index.html', 'www/css/style.css', '<%= jshint.js.src %>']
-            },
-            gruntfile: {
-                files: '<%= jshint.gruntfile.src %>',
-                tasks: ['jshint:gruntfile', 'jsvalidate']
+                files: [
+                    '<%= documentRoot %>/*.html',
+                    '<%= cssFile %>',
+                    '<%= appCompiled %>'
+                ]
             },
             css: {
-                files: 'www/css/**/*.styl',
+                files: [
+                    '<%= css %>/**/*.less'
+                ],
                 tasks: ['cssdev']
             },
             js: {
-                options: {
-                    livereload: true
-                },
-                files: '<%= jshint.js.src %>',
-                tasks: ['jshint:jsdev']
+                files: [
+                    '<%= app %>/**/*.js'
+                ],
+                tasks: ['jsdev']
             },
-            handlebars: {
-                options: {
-                    livereload: true
-                },
-                files: 'www/js/app/**/*.hbs',
+            jstpl: {
+                files: ['<%= app %>/**/*.hbs'],
                 tasks: ['handlebars']
+            },
+            tpl: {
+                files: [
+                    '<%= tpl %>/**/*.hbs'
+                ],
+                tasks: ['tpldev']
             }
-        },
-        clean: {
-            css: 'www/css/stylus.css',
-            build: [
-                'www/css/stylus.css',
-                'www/css/style.css',
-                'www/js/app.js',
-                'www/js/app/**/*.hbs.js'
-            ],
-            bower: 'www/bower',
-            npm: 'node_modules',
-            pack: [
-                '.bowerrc',
-                '.csslintrc',
-                '.editorconfig',
-                '.gitattributes',
-                '.gitignore',
-                '.jshintrc',
-                'Gruntfile.js',
-                'README.md',
-                '*.json',
-                'node_modules',
-                'www/css/*.styl',
-                'www/js/*',
-                '!www/js/app-compiled.js',
-                'www/js/.jshintrc',
-                'www/js/.jshintrc-dev',
-                'www/bower'
-            ]
         }
     });
 
-    // These plugins provide necessary tasks.
-    grunt.loadNpmTasks('grunt-contrib-stylus');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-csslint');
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-jsvalidate');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-handlebars');
-    grunt.loadNpmTasks('grunt-contrib-imagemin');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-requirejs');
-    grunt.loadNpmTasks('grunt-contrib-clean');
+    require('load-grunt-tasks')(grunt, {pattern: ['grunt-*', 'assemble']});
 
     // Custom tasks (aliases).
     grunt.registerTask('default', ['watch']);
-    grunt.registerTask('cssdev', ['stylus', 'concat:css', 'clean:css']);
-    grunt.registerTask('css', ['stylus', 'cssmin', 'clean:css']);
-    grunt.registerTask('gfx', ['imagemin']);
-    grunt.registerTask('jsdev', ['jshint:gruntfile', 'jshint:jsdev', 'jsvalidate']);
-    grunt.registerTask('js', ['handlebars', 'jshint:gruntfile', 'jshint:js', 'jsvalidate']);
-    grunt.registerTask('build', ['css', 'gfx', 'js', 'requirejs', 'concat:js']);
-    // Beware of 'grunt pack' task
-    grunt.registerTask('pack', ['build', 'clean:pack']);
+    grunt.registerTask('cssdev', ['less:dev']);
+    grunt.registerTask('css', ['less:production']);
+    grunt.registerTask('img', ['imagemin']);
+    grunt.registerTask('jsdev', ['newer:jshint:gruntfile', 'newer:jshint:dev', 'newer:jscs', 'newer:handlebars:compile', 'browserify:dev']);
+    grunt.registerTask('js', ['jshint:gruntfile', 'jshint:production', 'jscs', 'handlebars', 'browserify:production', 'uglify:compile']);
+    grunt.registerTask('tpldev', ['assemble:dev']);
+    grunt.registerTask('tpl', ['assemble:production']);
+    grunt.registerTask('dist', ['clean:production', 'copy:production']);
+    grunt.registerTask('build', ['css', 'img', 'copy:js', 'js', 'tpl', 'dist']);
 
 };

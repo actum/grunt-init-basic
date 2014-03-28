@@ -12,7 +12,7 @@
 var path = require('path');
 
 // Basic template description.
-exports.description = 'Create a basic project inculde Stylus, RequireJS and jQuery.';
+exports.description = 'Create a basic project inculde LESS, Browserify and jQuery.';
 
 // Template-specific notes to be displayed before question prompts.
 exports.notes = '_Project name_ should be a unique ID. _Project ' +
@@ -77,18 +77,21 @@ exports.template = function(grunt, init, done) {
             // TODO: pull from grunt's package.json
             node_version: '>= 0.8.0',
             devDependencies: {
-                'grunt-contrib-stylus': '~0.5.0',
-                'grunt-contrib-csslint': '~0.1.2',
-                'grunt-contrib-cssmin': '~0.6.1',
-                'grunt-contrib-concat': '~0.1.3',
-                'grunt-jsvalidate': '~0.2.1',
-                'grunt-contrib-jshint': '~0.1.1',
-                'grunt-contrib-watch': '~0.4.4',
-                'grunt-requirejs': '~0.3.5',
-                'grunt-contrib-handlebars': '~0.5.8',
-                'grunt-contrib-imagemin': '~0.1.4',
-                'grunt-contrib-clean': '~0.4.1',
-                'grunt': '~0.4.1'
+                'grunt': '~0.4.2',
+                'grunt-contrib-less': '~0.10.0',
+                'grunt-contrib-watch': '~0.6.1',
+                'grunt-contrib-jshint': '~0.8.0',
+                'grunt-contrib-copy': '~0.5.0',
+                'grunt-contrib-clean': '~0.5.0',
+                'grunt-browserify': '~1.3.0',
+                'grunt-contrib-uglify': '~0.4.0',
+                'assemble': '~0.4.13',
+                'grunt-contrib-handlebars': '~0.7.0',
+                'jshint-stylish': '~0.1.4',
+                'load-grunt-tasks': '~0.4.0',
+                'grunt-newer': '~0.6.0',
+                'grunt-jscs-checker': '~0.4.0',
+                'grunt-contrib-imagemin': '~0.5.0'
             },
         });
 

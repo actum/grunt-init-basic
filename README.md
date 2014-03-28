@@ -1,12 +1,12 @@
 # grunt-init-basic
 
 > Basic boilerplate for new project based on grunt, bower, html5boilerplate and others.<br>
-> Create a basic project include Stylus, RequireJS and jQuery.
+> Create a basic project include LESS, Browserify and jQuery.
 
 [grunt-init]: http://gruntjs.com/project-scaffolding
 [nodejs]: http://nodejs.org/
 [grunt]: http://gruntjs.com/
-[bower]: http://twitter.github.io/bower/
+[bower]: http://bower.io/
 
 ## Requirements
 - [NodeJS][nodejs]
@@ -56,10 +56,10 @@ grunt build
 After that, you may execute project tasks with grunt.
 
 ```
-grunt css       // compile stylus
+grunt css       // compile LESS
 grunt js        // lint js files, compile js templates
-grunt build     // build project with requirejs
-grunt           // run watch task for compile stylus, compile js templates and lint js files
+grunt build     // build project with Browserify
+grunt           // run watch task for compile LESS, compile js templates and lint js files
 
 grunt pack		// Beware of this task - it clean all source files (this is task for CI server)
 ```

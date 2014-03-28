@@ -1,6 +1,24 @@
+# system files
+.DS_STORE
+
+# nbproject
+/nbproject/
+
 # npm
-/node_modules/
+/node_modules/grunt-contrib-watch/
+/node_modules/grunt-newer/.cache/
 npm-debug.log
 
-# bower
-/www/bower/
+# css
+/www/css/style.css
+/www/css/style.css.map
+
+# js
+/www/js/*.js
+*.hbs.js
+
+# html
+/www/*.html
+
+# build
+/dist/

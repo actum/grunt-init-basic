@@ -6,8 +6,6 @@
     "newcap": true,
     "noarg": true,
     "sub": true,
-    "undef": true,
-    "unused": true,
     "boss": true,
     "eqnull": true,
     "indent": 4,
@@ -21,6 +19,9 @@
     "jquery": true,
     "predef": [
         "require",
-        "define"
-    ]
+        "module"
+    ],
+    "globals": {
+        "$": true
+    }
 }

@@ -2,8 +2,7 @@
     "name": "basic-project",
     "version": "0.0.0-ignored",
     "dependencies": {
-        "normalize-css": "~2.1.1",
-        "jquery": "~1.9.1",
-        "requirejs": "~2.1.5"
+        "bootstrap": "~3.1.1",
+        "html5shiv": "~3.7.0"
     }
 }
