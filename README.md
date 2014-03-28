@@ -38,14 +38,7 @@ You should now install project dependencies with:
 npm instal && bower install
 ```
 
-or you can use Shell script:
-
-```
-chmod +x init.sh
-./init.sh
-```
-
-You should use init.sh after each pull to refresh all dependencies and initialize app.
+You should use `npm instal && bower install && grunt build` after each pull to refresh all dependencies and initialize app.
 
 Before each commit run the build task to be shure the app is ok.
 
@@ -60,8 +53,6 @@ grunt css       // compile LESS
 grunt js        // lint js files, compile js templates
 grunt build     // build project with Browserify
 grunt           // run watch task for compile LESS, compile js templates and lint js files
-
-grunt pack		// Beware of this task - it clean all source files (this is task for CI server)
 ```
 
 _Note that this template will generate files in the current directory, so be sure to change to a new directory first if you don't want to overwrite existing files._
