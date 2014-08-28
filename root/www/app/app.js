@@ -8,3 +8,5 @@ app.init = function() {
     $('p').after('<h2>App works!</h2>');
 
 };
+
+window.app = app;
