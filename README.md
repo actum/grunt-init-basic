@@ -1,7 +1,7 @@
 # grunt-init-basic
 
 > Basic boilerplate for new project based on grunt, bower, html5boilerplate and others.<br>
-> Create a basic project include LESS, Browserify and jQuery.
+> Create a basic project include LESS (with Bootstrap), Browserify, React, jQuery and Assemble.
 
 [grunt-init]: http://gruntjs.com/project-scaffolding
 [nodejs]: http://nodejs.org/
@@ -46,13 +46,14 @@ Before each commit run the build task to be shure the app is ok.
 grunt build
 ```
 
-After that, you may execute project tasks with grunt.
+You can also execute each task separately.
 
 ```
 grunt css       // compile LESS
-grunt js        // lint js files, compile js templates
-grunt build     // build project with Browserify
-grunt           // run watch task for compile LESS, compile js templates and lint js files
+grunt js        // lint js files, compile js with Browserify
+grunt tpl       // compile static templates with Assemble
+grunt build     // build whole project
+grunt           // run watch task for compile LESS, lint and compile js files
 ```
 
 _Note that this template will generate files in the current directory, so be sure to change to a new directory first if you don't want to overwrite existing files._

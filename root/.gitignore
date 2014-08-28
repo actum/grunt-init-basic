@@ -1,24 +1,15 @@
 # system files
 .DS_STORE
 
-# nbproject
-/nbproject/
-
 # npm
-/node_modules/grunt-contrib-watch/
-/node_modules/grunt-newer/.cache/
+/node_modules/
 npm-debug.log
 
 # css
-/www/css/style.css
-/www/css/style.css.map
+/www/css/
 
 # js
-/www/js/*.js
-*.hbs.js
+/www/js/
 
 # html
 /www/*.html
-
-# build
-/dist/

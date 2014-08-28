@@ -2,32 +2,22 @@
 
 module.exports = function(grunt) {
 
-    // Project configuration.
     grunt.initConfig({
-        // Metadata.
         pkg: grunt.file.readJSON('{%= basicjson %}'),
-        // global
-        documentRoot: 'www',
-        bower: 'bower_components',
-        // css
-        css: '<%= documentRoot %>/css',
-        cssFile: '<%= css %>/style.css',
-        lessRoot: '<%= css %>/main.less',
-        // img
-        img: '<%= documentRoot %>/img',
-        // js
-        js: '<%= documentRoot %>/js',
-        app: '<%= js %>/app',
-        appCompiled: '<%= js %>/app-compiled.js',
-        // templates
-        tpl: '<%= documentRoot %>/tpl',
-        // dist
+        www: 'www',
+        bower: 'www/bower_components',
+        styles: 'www/less',
+        css: 'www/css',
+        img: 'www/img',
+        app: 'www/app',
+        js: 'www/js',
+        tpl: 'www/tpl',
         dist: 'dist',
-        // Task configuration.
+
         less: {
             options: {
                 paths: [
-                    '<%= css %>',
+                    '<%= styles %>',
                     '<%= bower %>'
                 ],
                 relativeUrls: true
@@ -37,131 +27,126 @@ module.exports = function(grunt) {
                     sourceMap: true,
                     sourceMapFilename: '<%= css %>/style.css.map',
                     sourceMapURL: 'style.css.map',
-                    sourceMapBasepath: '<%= documentRoot %>',
+                    sourceMapBasepath: '<%= www %>',
                     outputSourceFiles: true
                 },
                 files: {
-                    '<%= cssFile %>': '<%= lessRoot %>'
+                    '<%= css %>/style.css': '<%= styles %>/main.less'
                 }
             },
             production: {
-                options: {
-                    cleancss: true,
-                    report: 'min'
-                },
                 files: {
-                    '<%= cssFile %>': '<%= lessRoot %>'
+                    '<%= css %>/style.css': '<%= styles %>/main.less'
                 }
             }
         },
-        handlebars: {
-            compile: {
-                options: {
-                    namespace: false,
-                    commonjs: true,
-                    processName: function(filePath) {
-                        var pieces = filePath.split('/');
-                        return pieces[pieces.length - 1];
-                    }
-                },
-                files: [{
-                    expand: true,
-                    src: ['<%= app %>/**/*.hbs'],
-                    dest: '',
-                    ext: '.hbs.js'
-                }]
+
+        cssmin: {
+            min: {
+                files: {
+                    '<%= css %>/style.min.css': '<%= css %>/style.css'
+                }
             }
         },
+
         jshint: {
             options: {
-                reporter: require('jshint-stylish')
+                reporter: require('jshint-stylish'),
+
+                curly: true,
+                eqeqeq: true,
+                immed: true,
+                latedef: true,
+                newcap: true,
+                noarg: true,
+                sub: true,
+                undef: true,
+                unused: true,
+                boss: true,
+                eqnull: true,
+                indent: 4,
+                white: false,
+                quotmark: 'single',
+                trailing: true,
+                node: true,
+                jquery: true
             },
             gruntfile: {
-                options: {
-                    jshintrc: '.jshintrc'
-                },
                 src: 'Gruntfile.js'
             },
             dev: {
                 options: {
-                    jshintrc: '<%= app %>/.jshintrc-dev'
+                    undef: false,
+                    unused: false
                 },
                 src: [
-                    '<%= app %>/**/*.js',
-                    '!<%= app %>/**/*.hbs.js'
+                    '<%= app %>/**/*.js'
                 ]
             },
             production: {
                 options: {
-                    jshintrc: '<%= app %>/.jshintrc'
+                    browser: true
                 },
                 src: [
-                    '<%= app %>/**/*.js',
-                    '!<%= app %>/**/*.hbs.js'
+                    '<%= app %>/**/*.js'
                 ]
             }
         },
-        imagemin: {
-            production: {
-                options: {
-                    optimizationLevel: 3,
-                    progressive: true
-                },
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= img %>',
-                        src: ['**/*.{png,jpg,gif}'],
-                        dest: '<%= img %>',
-                        ext: ''
-                    }
-                ]
-            }
-        },
+
         jscs: {
             options: {
                 config: '.jscsrc'
             },
             src: [
-                '<%= app %>/**/*.js',
-                '!<%= app %>/**/*.hbs.js'
+                '<%= app %>/**/*.js'
             ]
         },
+
         browserify: {
             options: {
-                shim: {
-                    jquery: { path: '<%= bower %>/jquery/dist/jquery.js', exports: 'window.jQuery' },
-                    handlebars: { path: 'node_modules/grunt-contrib-handlebars/node_modules/handlebars/dist/handlebars.runtime.js', exports: 'Handlebars' }
-                }
+                transform: [ require('grunt-react').browserify ]
             },
             dev: {
                 options: {
                     debug: true
                 },
                 files: {
-                    '<%= appCompiled %>': ['<%= app %>/app.js']
+                    '<%= js %>/app-compiled.js': ['<%= app %>/app.js']
                 }
             },
             production: {
                 files: {
-                    '<%= appCompiled %>': ['<%= app %>/app.js']
+                    '<%= js %>/app-compiled.js': ['<%= app %>/app.js']
                 }
             }
         },
+
+        react: {
+            files: {
+                expand: true,
+                cwd: '<%= app %>',
+                src: ['**/*.jsx'],
+                dest: '<%= app %>',
+                ext: '.js'
+            }
+        },
+
         uglify: {
             options: {
                 report: 'min'
             },
             compile: {
                 files: {
-                    '<%= js %>/app-compiled.min.js': ['<%= appCompiled %>']
+                    '<%= js %>/app-compiled.min.js': ['<%= js %>/app-compiled.js']
                 }
             }
         },
+
         clean: {
             production: ['<%= dist %>'],
-            tpl: ['<%= documentRoot %>/*.html']
+            tpl: ['<%= www %>/*.html']
         },
+
         copy: {
             options: {
                 nonull: true
@@ -170,7 +155,7 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     flatten: true,
-                    src: ['<%= bower %>/html5shiv/dist/html5shiv-printshiv.js'],
+                    src: ['<%= bower %>/respond/dest/respond.min.js'],
                     dest: '<%= js %>'
                 }]
             },
@@ -179,7 +164,7 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: 'www',
                     src: [
-                        'css/style.css',
+                        'css/*.css',
                         'js/*.js',
                         'img/**/*',
                         '*.html'
@@ -188,6 +173,7 @@ module.exports = function(grunt) {
                 }]
             }
         },
+
         assemble: {
             options: {
                 pkg: '<%= pkg %>',
@@ -200,7 +186,7 @@ module.exports = function(grunt) {
                     layout: '<%= tpl %>/layouts/default.hbs'
                 },
                 files: {
-                    '<%= documentRoot %>': ['<%= tpl %>/pages/**/*.hbs']
+                    '<%= www %>': ['<%= tpl %>/pages/**/*.hbs']
                 }
             },
             production: {
@@ -210,10 +196,11 @@ module.exports = function(grunt) {
                     layout: '<%= tpl %>/layouts/default.hbs'
                 },
                 files: {
-                    '<%= documentRoot %>': ['<%= tpl %>/pages/**/*.hbs']
+                    '<%= www %>': ['<%= tpl %>/pages/**/*.hbs']
                 }
             }
         },
+
         watch: {
             gruntfile: {
                 files: 'Gruntfile.js',
@@ -224,26 +211,22 @@ module.exports = function(grunt) {
                     livereload: true
                 },
                 files: [
-                    '<%= documentRoot %>/*.html',
-                    '<%= cssFile %>',
-                    '<%= appCompiled %>'
+                    '<%= www %>/*.html',
+                    '<%= css %>/style.css',
+                    '<%= js %>/app-compiled.js'
                 ]
             },
             css: {
                 files: [
-                    '<%= css %>/**/*.less'
+                    '<%= styles %>/**/*.less'
                 ],
                 tasks: ['cssdev']
             },
             js: {
                 files: [
-                    '<%= app %>/**/*.js'
+                    '<%= app %>/**/*.{js,jsx}'
                 ],
                 tasks: ['jsdev']
-            },
-            jstpl: {
-                files: ['<%= app %>/**/*.hbs'],
-                tasks: ['handlebars']
             },
             tpl: {
                 files: [
@@ -254,18 +237,16 @@ module.exports = function(grunt) {
         }
     });
 
-    require('load-grunt-tasks')(grunt, {pattern: ['grunt-*', 'assemble']});
+    require('jit-grunt')(grunt);
 
-    // Custom tasks (aliases).
     grunt.registerTask('default', ['watch']);
     grunt.registerTask('cssdev', ['less:dev']);
-    grunt.registerTask('css', ['less:production']);
-    grunt.registerTask('img', ['imagemin']);
-    grunt.registerTask('jsdev', ['newer:jshint:gruntfile', 'newer:jshint:dev', 'newer:jscs', 'newer:handlebars:compile', 'browserify:dev']);
-    grunt.registerTask('js', ['jshint:gruntfile', 'jshint:production', 'jscs', 'handlebars', 'browserify:production', 'uglify:compile']);
+    grunt.registerTask('css', ['less:production', 'cssmin']);
+    grunt.registerTask('jsdev', ['newer:jshint:gruntfile', 'newer:jshint:dev', 'newer:jscs', 'browserify:dev']);
+    grunt.registerTask('js', ['jshint:gruntfile', 'jshint:production', 'jscs', 'browserify:production', 'uglify:compile']);
     grunt.registerTask('tpldev', ['assemble:dev']);
     grunt.registerTask('tpl', ['assemble:production']);
     grunt.registerTask('dist', ['clean:production', 'copy:production']);
-    grunt.registerTask('build', ['css', 'img', 'copy:js', 'js', 'tpl', 'dist']);
+    grunt.registerTask('build', ['css', 'copy:js', 'js', 'tpl', 'dist']);
 
 };

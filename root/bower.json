@@ -2,7 +2,9 @@
     "name": "basic-project",
     "version": "0.0.0-ignored",
     "dependencies": {
-        "bootstrap": "~3.1.1",
-        "html5shiv": "~3.7.0"
+        "bootstrap": "~3.2.0",
+        "jquery": "~1.11.1",
+        "respond": "~1.4.2",
+        "es5-shim": "~4.0.3"
     }
 }
