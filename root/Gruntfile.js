@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('{%= basicjson %}'),
         www: 'www',
-        bower: 'www/bower_components',
+        bower: 'www/bower',
         styles: 'www/less',
         css: 'www/css',
         img: 'www/img',
@@ -144,7 +144,11 @@ module.exports = function(grunt) {
 
         clean: {
             production: ['<%= dist %>'],
-            tpl: ['<%= www %>/*.html']
+            build: [
+                '<%= css %>/*',
+                '<%= js %>/*',
+                '<%= www %>/*.html'
+            ]
         },
 
         copy: {
@@ -247,6 +251,6 @@ module.exports = function(grunt) {
     grunt.registerTask('tpldev', ['assemble:dev']);
     grunt.registerTask('tpl', ['assemble:production']);
     grunt.registerTask('dist', ['clean:production', 'copy:production']);
-    grunt.registerTask('build', ['css', 'copy:js', 'js', 'tpl', 'dist']);
+    grunt.registerTask('build', ['clean:build', 'css', 'copy:js', 'js', 'tpl', 'dist']);
 
 };
