@@ -77,21 +77,22 @@ exports.template = function(grunt, init, done) {
             // TODO: pull from grunt's package.json
             node_version: '>= 0.8.0',
             devDependencies: {
-                'grunt': '^0.4.5',
-                'grunt-contrib-less': '~0.11.4',
-                'grunt-contrib-cssmin': '^0.10.0',
-                'grunt-contrib-watch': '~0.6.1',
-                'grunt-contrib-jshint': '~0.10.0',
-                'grunt-contrib-copy': '~0.5.0',
-                'grunt-contrib-clean': '~0.6.0',
-                'grunt-browserify': '~2.1.4',
-                'grunt-react': '^0.9.0',
-                'grunt-contrib-uglify': '~0.5.1',
                 'assemble': '~0.4.42',
-                'jshint-stylish': '~0.4.0',
-                'jit-grunt': '~0.8.0',
-                'grunt-newer': '~0.7.0',
-                'grunt-jscs': '~0.6.2'
+                'grunt': '^0.4.5',
+                'grunt-browser-sync': '^1.5.2',
+                'grunt-browserify': '~3.2.1',
+                'grunt-cache-bust': '^0.4.5',
+                'grunt-contrib-clean': '~0.6.0',
+                'grunt-contrib-copy': '~0.7.0',
+                'grunt-contrib-cssmin': '^0.10.0',
+                'grunt-contrib-jshint': '~0.10.0',
+                'grunt-contrib-less': '~0.12.0',
+                'grunt-contrib-uglify': '~0.6.0',
+                'grunt-este-watch': '^0.1.18',
+                'grunt-jscs': '~1.0.0',
+                'grunt-react': '^0.9.0',
+                'jit-grunt': '~0.9.0',
+                'jshint-stylish': '~1.0.0'
             },
         });
 

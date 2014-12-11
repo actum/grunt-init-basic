@@ -108,7 +108,8 @@ module.exports = function(grunt) {
             },
             dev: {
                 options: {
-                    debug: true
+                    debug: true,
+                    watch: true
                 },
                 files: {
                     '<%= js %>/app-compiled.js': ['<%= app %>/app.js']
@@ -205,52 +206,82 @@ module.exports = function(grunt) {
             }
         },
 
-        watch: {
-            gruntfile: {
-                files: 'Gruntfile.js',
-                tasks: ['jshint:gruntfile']
+        cacheBust: {
+            options: {
+                encoding: 'utf8',
+                algorithm: 'md5',
+                length: 8,
+                rename: false
             },
-            livereload: {
-                options: {
-                    livereload: true
+            assets: {
+                files: [{
+                    src: ['<%= dist %>/*.html']
+                }]
+            }
+        },
+
+        esteWatch: {
+            options: {
+                dirs: [
+                    './',
+                    '<%= styles %>/**/',
+                    '<%= tpl %>/**/'
+                ],
+                livereload: {
+                    enabled: false
+                }
+            },
+            less: function() {
+                return 'cssdev';
+            },
+            js: function(filepath) {
+                if (filepath === 'Gruntfile.js') {
+                    return 'jshint:gruntfile';
+                } else if (filepath === 'www/js/app-compiled.js') {
+                    return;
+                } else {
+                    grunt.config(['jshint', 'dev', 'src'], filepath);
+                    grunt.config(['jscs', 'src'], filepath);
+                    return 'jsdev';
+                }
+            },
+            jsx: function() {
+                return 'jsdev';
+            },
+            hbs: function() {
+                return 'tpldev';
+            },
+            json: function() {
+                return 'tpldev';
+            }
+        },
+
+        browserSync: {
+            dev: {
+                bsFiles: {
+                    src: [
+                        '<%= css %>/style.css',
+                        '<%= js %>/app-compiled.js',
+                        '<%= www %>/*.html'
+                    ]
                 },
-                files: [
-                    '<%= www %>/*.html',
-                    '<%= css %>/style.css',
-                    '<%= js %>/app-compiled.js'
-                ]
-            },
-            css: {
-                files: [
-                    '<%= styles %>/**/*.less'
-                ],
-                tasks: ['cssdev']
-            },
-            js: {
-                files: [
-                    '<%= app %>/**/*.{js,jsx}'
-                ],
-                tasks: ['jsdev']
-            },
-            tpl: {
-                files: [
-                    '<%= tpl %>/**/*.hbs'
-                ],
-                tasks: ['tpldev']
+                options: {
+                    watchTask: true
+                }
             }
         }
     });
 
     require('jit-grunt')(grunt);
 
-    grunt.registerTask('default', ['watch']);
+    grunt.registerTask('default', ['cssdev', 'jsdev', 'tpldev', 'browserSync', 'esteWatch']);
     grunt.registerTask('cssdev', ['less:dev']);
     grunt.registerTask('css', ['less:production', 'cssmin']);
-    grunt.registerTask('jsdev', ['newer:jshint:gruntfile', 'newer:jshint:dev', 'newer:jscs', 'browserify:dev']);
+    grunt.registerTask('jsdev', ['jshint:gruntfile', 'jshint:dev', 'jscs', 'browserify:dev']);
     grunt.registerTask('js', ['jshint:gruntfile', 'jshint:production', 'jscs', 'browserify:production', 'uglify:compile']);
     grunt.registerTask('tpldev', ['assemble:dev']);
     grunt.registerTask('tpl', ['assemble:production']);
-    grunt.registerTask('dist', ['clean:production', 'copy:production']);
+    grunt.registerTask('dist', ['clean:production', 'copy:production', 'cacheBust']);
     grunt.registerTask('build', ['clean:build', 'css', 'copy:js', 'js', 'tpl', 'dist']);
 
 };
