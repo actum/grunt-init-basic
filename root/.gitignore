@@ -16,3 +16,6 @@ npm-debug.log
 
 # html
 /www/*.html
+
+# dist
+/dist/
