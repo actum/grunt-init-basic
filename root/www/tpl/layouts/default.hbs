@@ -36,14 +36,11 @@
         <script>
             var config = {};
             app.init(config);
-
-            {{#if environment.devel}}
-                // livereload - only for development
-                var s = document.createElement('script');
-                s.type = 'text/javascript';
-                s.src = location.origin + ':35729/livereload.js';
-                document.querySelector('body').appendChild(s);
-            {{/if}}
         </script>
+        {{#if environment.devel}}
+            <script type='text/javascript' id="__bs_script__">//<![CDATA[
+                document.write("<script async src='//HOST:3000/browser-sync/browser-sync-client.1.7.2.js'><\/script>".replace(/HOST/g, location.hostname).replace(/PORT/g, location.port));
+            //]]></script>
+        {{/if}}
     </body>
 </html>

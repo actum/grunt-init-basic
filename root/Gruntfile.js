@@ -57,6 +57,7 @@ module.exports = function(grunt) {
                 eqeqeq: true,
                 immed: true,
                 latedef: true,
+                freeze: true,
                 newcap: true,
                 noarg: true,
                 sub: true,
@@ -68,15 +69,25 @@ module.exports = function(grunt) {
                 white: false,
                 quotmark: 'single',
                 trailing: true,
-                node: true,
-                jquery: true
+                jquery: true,
+                browser: true,
+                debug: false,
+                devel: false,
+                predef: [
+                    'require',
+                    'module'
+                ]
             },
             gruntfile: {
+                options: {
+                    node: true
+                },
                 src: 'Gruntfile.js'
             },
             dev: {
                 options: {
-                    undef: false,
+                    devel: true,
+                    debug: true,
                     unused: false
                 },
                 src: [
@@ -84,9 +95,6 @@ module.exports = function(grunt) {
                 ]
             },
             production: {
-                options: {
-                    browser: true
-                },
                 src: [
                     '<%= app %>/**/*.js'
                 ]
@@ -160,7 +168,11 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     flatten: true,
-                    src: ['<%= bower %>/respond/dest/respond.min.js'],
+                    src: [
+                        '<%= bower %>/respond/dest/respond.min.js',
+                        '<%= bower %>/es5-shim/es5-shim.min.js',
+                        '<%= bower %>/es5-shim/es5-sham.min.js'
+                    ],
                     dest: '<%= js %>'
                 }]
             },
